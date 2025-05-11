@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  dst:
+    build: .
+    container_name: dst_server
+    environment:
+      - CLUSTER_NAME=MyDSTCluster
+      - CLUSTER_TOKEN=${DST_CLUSTER_TOKEN}
+      - CLUSTER_PASSWORD=${DST_CLUSTER_PASSWORD}
+      - MAX_PLAYERS=6
+    volumes:
+      - ./cluster:/opt/dst/cluster       # 클러스터 설정 영속화
+      - ./mods:/opt/dst/mods             # 모드 디렉터리 (선택)
+      - dst_data:/opt/dst/cluster        # 월드 저장소 (볼륨)
+    ports:
+      - "10999:10999/udp"
+      - "11000:11000/udp"
+      - "11001:11001/udp"
+      - "11002:11002/udp"
+    restart: unless-stopped
+
+volumes:
+  dst_data:
